@@ -1,5 +1,4 @@
 resource "aws_elasticsearch_domain" "es_domain" {
-
   count = var.enabled ? 1 : 0
 
   # Domain name
@@ -147,8 +146,11 @@ resource "aws_elasticsearch_domain" "es_domain" {
 
   # Service-linked role to give Amazon ES permissions to access your VPC
   depends_on = [aws_iam_service_linked_role.es, aws_cloudwatch_log_group.es_cloudwatch_log_group]
-
+  domain_endpoint_options {
+    enforce_https = true
+  }
 }
+
 
 resource "random_password" "master_password" {
   count = local.create_random_master_password ? 1 : 0
